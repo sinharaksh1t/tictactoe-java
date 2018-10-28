@@ -34,23 +34,28 @@ public class TicTacToe {
 		int turnCount = 1;
 		int turn = 2;
 		boolean flag = true;
-		while(flag && turnCount < 9) {
+		while(flag && turnCount < 10) {
 			printGrid();
 			turn = turn == 2 ? 1 : 2;
 			System.out.print("Player "+turn+"'s turn: ");
-			char input = in.readLine().charAt(0);
-			while((input < '1' || input > '9') || 
+			String str = in.readLine();
+			char input = str.charAt(0);
+			while(str.length() > 1 || (input < '1' || input > '9') || 
 				!Character.isDigit(grid [gridMap.get(input-'0').charAt(0)-'0'] [gridMap.get(input-'0').charAt(1)-'0'] ) ) {
-				System.out.println("Wrong input! Please enter again!");
+				System.out.println("\nWrong input! Please enter again!");
+				printGrid();
 				System.out.print("Player "+turn+"'s turn: ");
-				input = in.readLine().charAt(0);
+				str = in.readLine();
+				input = str.charAt(0);
 			}
+			char turnChar = turn == 1 ? 'X' : 'O';
+			updateGrid(turnChar, gridMap.get(input-'0'));
 			if(checkVictory()) {
 				flag = false;
 			}
 			turnCount++;
 		}
-		if(turnCount == 9) {
+		if(turnCount == 10) {
 			System.out.println("Game Over! No victors!");
 		}
 		else if(!flag) {
@@ -60,6 +65,10 @@ public class TicTacToe {
 
 	private boolean checkVictory() {
 		return false;
+	}
+
+	private void updateGrid(char turn, String coord) {
+		grid[coord.charAt(0)-'0'][coord.charAt(1)-'0'] = turn;
 	}
 
 	private void printGrid() {
