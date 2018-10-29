@@ -40,8 +40,9 @@ public class TicTacToe {
 			System.out.print("Player "+turn+"'s turn: ");
 			String str = in.readLine();
 			char input = str.charAt(0);
-			while(str.length() > 1 || (input < '1' || input > '9') || 
-				!Character.isDigit(grid [gridMap.get(input-'0').charAt(0)-'0'] [gridMap.get(input-'0').charAt(1)-'0'] ) ) {
+			while(str.length() > 1 || str.length() <= 0 || input < '1' || input > '9' || 
+			grid[gridMap.get(input-'0').charAt(0)-'0'][gridMap.get(input-'0').charAt(1)-'0'] == 'X' ||
+			grid[gridMap.get(input-'0').charAt(0)-'0'][gridMap.get(input-'0').charAt(1)-'0'] == 'O') {
 				System.out.println("\nWrong input! Please enter again!");
 				printGrid();
 				System.out.print("Player "+turn+"'s turn: ");
@@ -49,26 +50,61 @@ public class TicTacToe {
 				input = str.charAt(0);
 			}
 			char turnChar = turn == 1 ? 'X' : 'O';
-			updateGrid(turnChar, gridMap.get(input-'0'));
-			if(checkVictory()) {
+			updateGrid(turnChar, gridMap.get(input-'0'), input);
+			if(checkVictory(turnChar)) {
 				flag = false;
 			}
 			turnCount++;
 		}
-		if(turnCount == 10) {
-			System.out.println("Game Over! No victors!");
-		}
-		else if(!flag) {
+		if(!flag) {
+			printGrid();
 			System.out.println("Congratulations! Player "+turn+" has won the game!");
 		}
+		else if(turnCount == 10) {
+			printGrid();
+			System.out.println("Game Over! No victors!");
+		} 
 	}
 
-	private boolean checkVictory() {
+	private boolean checkVictory(char turnChar) {
+		System.out.println();
+		for(int i = 1;i<=8;i++) {
+			String res = null;
+			switch(i) {
+				case 1:
+				res = "" + grid[0][0] + grid[0][1] + grid[0][2];
+				break;
+				case 2:
+				res = "" + grid[1][0] + grid[1][1] + grid[1][2];
+				break;
+				case 3:
+				res = "" + grid[2][0] + grid[2][1] + grid[2][2];
+				break;
+				case 4:
+				res = "" + grid[0][0] + grid[1][0] + grid[2][0];
+				break;
+				case 5:
+				res = "" + grid[0][1] + grid[1][1] + grid[2][1];
+				break;
+				case 6:
+				res = "" + grid[0][2] + grid[1][2] + grid[2][2];
+				break;
+				case 7:
+				res = "" + grid[0][0] + grid[1][1] + grid[2][2];
+				break;
+				case 8:
+				res = "" + grid[2][0] + grid[1][1] + grid[0][2];
+				break;
+			}
+			if(res.equals(""+turnChar+turnChar+turnChar)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
-	private void updateGrid(char turn, String coord) {
-		grid[coord.charAt(0)-'0'][coord.charAt(1)-'0'] = turn;
+	private void updateGrid(char turnChar, String coord, char input) {
+		grid[coord.charAt(0)-'0'][coord.charAt(1)-'0'] = turnChar;
 	}
 
 	private void printGrid() {
